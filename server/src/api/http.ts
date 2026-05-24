@@ -16,23 +16,34 @@ export function createRouter(cdp: CDPSession, wsClients: WsClients): Router {
 
   // POST /api/debates — create & start a new debate
   router.post('/debates', async (req, res) => {
-    const { topic, principles = '', synthesizer, deepseekConfig, claudeConfig } = req.body as {
+    const { topic, principles = '', participants, synthesizer, deepseekConfig, claudeConfig } = req.body as {
       topic?: string; principles?: string; synthesizer?: ModelName
+      participants?: ModelName[]
       deepseekConfig?: ModelConfigs['deepseek']; claudeConfig?: ModelConfigs['claude']
     }
-    if (!topic || !synthesizer) {
-      return res.status(400).json({ error: 'topic and synthesizer are required' })
+    if (!topic || !synthesizer || !participants) {
+      return res.status(400).json({ error: 'topic, participants, and synthesizer are required' })
+    }
+    const uniqueParticipants = [...new Set(participants)]
+    if (uniqueParticipants.length !== 3 || !uniqueParticipants.every(m => MODELS.includes(m))) {
+      return res.status(400).json({ error: 'participants must contain exactly 3 supported models' })
+    }
+    if (!uniqueParticipants.includes(synthesizer)) {
+      return res.status(400).json({ error: 'synthesizer must be one of the selected participants' })
     }
 
     const modelConfigs: ModelConfigs = {
       deepseek: deepseekConfig ?? DEFAULT_MODEL_CONFIGS.deepseek,
       claude: claudeConfig ?? DEFAULT_MODEL_CONFIGS.claude,
       chatgpt: {},
+      gemini: {},
+      grok: {},
     }
 
     const id = uuid()
     debates.create({
       id, topic, principles, synthesizer,
+      participantsJson: JSON.stringify(uniqueParticipants),
       deepseekConfigJson: JSON.stringify(modelConfigs.deepseek),
       claudeConfigJson: JSON.stringify(modelConfigs.claude),
     })
@@ -44,7 +55,7 @@ export function createRouter(cdp: CDPSession, wsClients: WsClients): Router {
       listeners?.forEach(fn => fn(event))
     }
 
-    runDebate(id, topic, principles, synthesizer, cdp, emit, modelConfigs).catch(err => {
+    runDebate(id, topic, principles, uniqueParticipants, synthesizer, cdp, emit, modelConfigs).catch(err => {
       console.error('[debate] fatal error:', err)
       emit({ type: 'error', debateId: id, error: String(err) })
       debates.setStatus(id, 'error')
@@ -92,7 +103,7 @@ export function createRouter(cdp: CDPSession, wsClients: WsClients): Router {
       6: { roman: 'V',   name: '终稿复核' },
     }
     const MODEL_LABEL: Record<string, string> = {
-      claude: 'Claude', chatgpt: 'ChatGPT', deepseek: 'DeepSeek',
+      claude: 'Claude', chatgpt: 'OpenAI', deepseek: 'DeepSeek', gemini: 'Gemini', grok: 'Grok',
     }
 
     // The topic field accepts a pasted markdown document. Use only its

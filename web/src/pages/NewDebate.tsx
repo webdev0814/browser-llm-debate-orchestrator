@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { MODEL_META } from '../lib/models.ts'
+import { MODEL_META, MODELS } from '../lib/models.ts'
 import type { ModelName } from '../lib/models.ts'
 
 type LoginStatus = Record<ModelName, boolean>
@@ -10,6 +10,7 @@ type DeepSeekMode = 'fast' | 'expert'
 export default function NewDebate() {
   const [topic, setTopic] = useState('')
   const [principles, setPrinciples] = useState('')
+  const [participants, setParticipants] = useState<ModelName[]>(['claude', 'chatgpt', 'deepseek'])
   const [synthesizer, setSynthesizer] = useState<ModelName>('claude')
   const [claudeModel, setClaudeModel] = useState<ClaudeModel>('sonnet-4-6')
   const [deepseekMode, setDeepseekMode] = useState<DeepSeekMode>('fast')
@@ -25,9 +26,26 @@ export default function NewDebate() {
       .catch(() => setLoginStatus(null))
   }, [])
 
+  useEffect(() => {
+    if (!participants.includes(synthesizer)) {
+      setSynthesizer(participants[0]!)
+    }
+  }, [participants, synthesizer])
+
   const allLoggedIn = loginStatus
     ? Object.values(loginStatus).every(Boolean)
     : false
+
+  const toggleParticipant = (model: ModelName) => {
+    setParticipants(prev => {
+      if (prev.includes(model)) {
+        if (prev.length === 3) return prev
+        return prev.filter(m => m !== model)
+      }
+      if (prev.length >= 3) return [...prev.slice(1), model]
+      return [...prev, model]
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,6 +58,7 @@ export default function NewDebate() {
         body: JSON.stringify({
           topic: topic.trim(),
           principles: principles.trim(),
+          participants,
           synthesizer,
           claudeConfig: { model: claudeModel },
           deepseekConfig: {
@@ -125,9 +144,9 @@ export default function NewDebate() {
           alignItems: 'baseline',
           flexWrap: 'wrap',
         }}>
-          <span className="byline">论辩参与方就绪状况</span>
+          <span className="byline">Provider readiness</span>
           <div style={{ display: 'flex', gap: '1.6rem', flexWrap: 'wrap' }}>
-            {(['claude', 'chatgpt', 'deepseek'] as ModelName[]).map(m => (
+            {MODELS.map(m => (
               <span key={m} style={{
                 display: 'flex', alignItems: 'center', gap: 8,
                 fontFamily: 'var(--serif-display)',
@@ -151,7 +170,7 @@ export default function NewDebate() {
               color: 'var(--vermilion)',
               flexBasis: '100%',
             }}>
-              请先在浏览器中完成三方登录后再开始论辩。
+              Sign into the model sites you want to use before starting.
             </p>
           )}
         </div>
@@ -191,18 +210,32 @@ export default function NewDebate() {
           />
         </div>
 
-        {/* Synthesizer */}
+        {/* Participants */}
         <div className="field fade-up">
-          <label>第 三 项 · 综合者</label>
-          <div style={{ display: 'flex', gap: '0.6rem' }}>
-            {(['claude', 'chatgpt', 'deepseek'] as ModelName[]).map(m => (
+          <label>Third · Participants</label>
+          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+            {MODELS.map(m => (
+              <Pill key={m} active={participants.includes(m)} onClick={() => toggleParticipant(m)} tone={MODEL_META[m].tone}>
+                {MODEL_META[m].display}
+              </Pill>
+            ))}
+          </div>
+          <p className="byline faint" style={{ marginTop: '0.55rem', textTransform: 'none', letterSpacing: 0, fontFamily: 'var(--serif-body)', fontStyle: 'italic', fontSize: 13 }}>
+            Pick exactly 3 models per debate.
+          </p>
+        </div>
+
+        <div className="field fade-up">
+          <label>Fourth · Synthesizer</label>
+          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+            {participants.map(m => (
               <Pill key={m} active={synthesizer === m} onClick={() => setSynthesizer(m)} tone={MODEL_META[m].tone}>
                 {MODEL_META[m].display}
               </Pill>
             ))}
           </div>
           <p className="byline faint" style={{ marginTop: '0.55rem', textTransform: 'none', letterSpacing: 0, fontFamily: 'var(--serif-body)', fontStyle: 'italic', fontSize: 13 }}>
-            由该模型负责最终综合迭代成稿。
+            This model writes the final synthesis.
           </p>
         </div>
 

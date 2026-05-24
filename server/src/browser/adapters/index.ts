@@ -2,11 +2,15 @@ import { SiteAdapter, DeepSeekConfig, ClaudeConfig } from './base.js'
 import { ClaudeAdapter } from './claude.js'
 import { ChatGPTAdapter } from './chatgpt.js'
 import { DeepSeekAdapter } from './deepseek.js'
+import { GeminiAdapter } from './gemini.js'
+import { GrokAdapter } from './grok.js'
 
 export type ModelConfigs = {
   claude: ClaudeConfig
   chatgpt: Record<string, never>
   deepseek: DeepSeekConfig
+  gemini: Record<string, never>
+  grok: Record<string, never>
 }
 
 export type ModelName = keyof ModelConfigs
@@ -20,6 +24,8 @@ export const ADAPTER_REGISTRY: { [N in ModelName]: ModelEntry<N> } = {
   claude:   { ctor: () => new ClaudeAdapter(),   defaultConfig: { model: 'sonnet-4-6' } },
   chatgpt:  { ctor: () => new ChatGPTAdapter(),  defaultConfig: {} },
   deepseek: { ctor: () => new DeepSeekAdapter(), defaultConfig: { mode: 'fast', deepThink: false, smartSearch: false } },
+  gemini:   { ctor: () => new GeminiAdapter(),   defaultConfig: {} },
+  grok:     { ctor: () => new GrokAdapter(),     defaultConfig: {} },
 }
 
 export const MODELS = Object.keys(ADAPTER_REGISTRY) as ModelName[]

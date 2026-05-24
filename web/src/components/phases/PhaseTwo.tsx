@@ -5,6 +5,7 @@ import ThreeColumns from './ThreeColumns.tsx'
 
 export default function PhaseTwoView(props: {
   panels: Partial<Record<ModelName, ModelStream | null>>
+  participants: ModelName[]
   isActivePhase: boolean
   isAborted: boolean
   onRefetch?: (model: ModelName) => void
@@ -14,6 +15,7 @@ export default function PhaseTwoView(props: {
       <PhaseHeader phase={2} isActive={props.isActivePhase} isAborted={props.isAborted} />
       <ThreeColumns
         panels={props.panels}
+        participants={props.participants}
         isActivePhase={props.isActivePhase}
         onRefetch={props.onRefetch}
       />

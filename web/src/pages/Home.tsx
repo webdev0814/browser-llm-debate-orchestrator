@@ -27,8 +27,10 @@ const STATUS_COLOR: Record<string, string> = {
 
 const MODEL_DISPLAY: Record<string, string> = {
   claude: 'Claude',
-  chatgpt: 'ChatGPT',
+  chatgpt: 'OpenAI',
   deepseek: 'DeepSeek',
+  gemini: 'Gemini',
+  grok: 'Grok',
 }
 
 export default function Home() {

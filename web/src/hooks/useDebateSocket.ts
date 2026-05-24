@@ -33,7 +33,7 @@ export interface DebateState {
 // from the orchestrator is 2 (各自方案).
 const INITIAL: DebateState = {
   phase: 2,
-  streams: { claude: [], chatgpt: [], deepseek: [] },
+  streams: { claude: [], chatgpt: [], deepseek: [], gemini: [], grok: [] },
   summary: null,
   done: false,
   error: null,

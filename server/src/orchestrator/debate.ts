@@ -73,6 +73,7 @@ export async function runDebate(
   debateId: string,
   topic: string,
   principles: string,
+  participants: ModelName[],
   synthesizer: ModelName,
   cdp: CDPSession,
   emit: EventEmitter,
@@ -82,7 +83,7 @@ export async function runDebate(
 
   const adapters = makeAdapters()
 
-  for (const model of MODELS) {
+  for (const model of participants) {
     const page = await cdp.ensurePage(model)
     adapters[model].setPage(page)
     await adapters[model].ensureReady()
@@ -93,14 +94,14 @@ export async function runDebate(
   // All later phases continue in this same conversation for each model.
   // -------------------------------------------------------------------------
   const phase2Results: { name: ModelName; content: string }[] = []
-  await Promise.all(MODELS.map(async model => {
+  await Promise.all(participants.map(async model => {
     const prompt = PHASE2_PROMPT(topic, principles, model)
     const content = await runModel(
       debateId, 2, model, adapters[model], prompt, emit, true, modelConfigs[model])
     phase2Results.push({ name: model, content })
   }))
   // Re-sort to MODELS order (parallel resolves out-of-order)
-  phase2Results.sort((a, b) => MODELS.indexOf(a.name) - MODELS.indexOf(b.name))
+  phase2Results.sort((a, b) => participants.indexOf(a.name) - participants.indexOf(b.name))
 
   // -------------------------------------------------------------------------
   // Phase 3 — 互评 + 排名 (parallel, continues same conversation).
@@ -114,7 +115,7 @@ export async function runDebate(
   ) as Record<ModelName, AnonLabel>
 
   const phase3Results: { name: ModelName; content: string; ranking: AnonLabel[] | null }[] = []
-  await Promise.all(MODELS.map(async model => {
+  await Promise.all(participants.map(async model => {
     const prompt = PHASE3_PROMPT(anonymized, labelByName[model])
     const content = await runModel(
       debateId, 3, model, adapters[model], prompt, emit, false)
@@ -126,7 +127,7 @@ export async function runDebate(
       console.warn(`[debate] ${model} did not produce a parseable FINAL RANKING`)
     }
   }))
-  phase3Results.sort((a, b) => MODELS.indexOf(a.name) - MODELS.indexOf(b.name))
+  phase3Results.sort((a, b) => participants.indexOf(a.name) - participants.indexOf(b.name))
 
   const aggregated = aggregateRankings(anonymized, phase3Results.map(r => r.ranking))
   console.log('[debate] aggregated ranking:',
@@ -139,7 +140,7 @@ export async function runDebate(
   // critiques + the aggregated ranking.
   // -------------------------------------------------------------------------
   const phase4Results: { name: ModelName; content: string }[] = []
-  await Promise.all(MODELS.map(async model => {
+  await Promise.all(participants.map(async model => {
     const myLabel = labelByName[model]
     const otherCritiques = phase3Results
       .filter(r => r.name !== model)
@@ -149,7 +150,7 @@ export async function runDebate(
       debateId, 4, model, adapters[model], prompt, emit, false)
     phase4Results.push({ name: model, content })
   }))
-  phase4Results.sort((a, b) => MODELS.indexOf(a.name) - MODELS.indexOf(b.name))
+  phase4Results.sort((a, b) => participants.indexOf(a.name) - participants.indexOf(b.name))
 
   // -------------------------------------------------------------------------
   // Phase 5 — 综合 + 裁决 + 少数派意见 (synthesizer only, continues same chat).
@@ -190,7 +191,7 @@ export async function runDebate(
   // Phase 6 — 终稿复核 (parallel ratify/veto by non-synthesizers, continues
   // each reviewer's own conversation).
   // -------------------------------------------------------------------------
-  const reviewers = MODELS.filter(m => m !== synthesizer)
+  const reviewers = participants.filter(m => m !== synthesizer)
   await Promise.all(reviewers.map(async model => {
     const prompt = PHASE6_PROMPT(model, synthesizer, comparison, finalProposal, dissent)
     const content = await runModel(

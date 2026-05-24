@@ -2,7 +2,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { ModelName } from '../../lib/models.ts'
 import type { ModelStream } from '../../hooks/useDebateSocket.ts'
-import { MODELS, MODEL_META } from '../../lib/models.ts'
+import { MODEL_META } from '../../lib/models.ts'
 import { parseVerdict } from '../../lib/parseDebateOutput.ts'
 import PhaseHeader from './PhaseHeader.tsx'
 import RefetchButton from '../RefetchButton.tsx'
@@ -23,13 +23,14 @@ function verdictBadge(content: string | undefined): Badge | null {
 
 export default function PhaseSixView(props: {
   panels: Partial<Record<ModelName, ModelStream | null>>
+  participants: ModelName[]
   synthesizer: ModelName | undefined
   isActivePhase: boolean
   isAborted: boolean
   onRefetch?: (model: ModelName) => void
 }) {
-  const { panels, synthesizer, isActivePhase, isAborted, onRefetch } = props
-  const reviewers = MODELS.filter(m => m !== synthesizer)
+  const { panels, participants, synthesizer, isActivePhase, isAborted, onRefetch } = props
+  const reviewers = participants.filter(m => m !== synthesizer)
 
   return (
     <section className="fade-up">

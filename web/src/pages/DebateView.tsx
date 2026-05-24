@@ -25,6 +25,10 @@ interface StoredSummary {
   dissent?: string
 }
 
+function emptyStreams(): Record<ModelName, ModelStream[]> {
+  return { claude: [], chatgpt: [], deepseek: [], gemini: [], grok: [] }
+}
+
 const STATUS_LABEL: Record<string, string> = {
   pending: '排版中',
   running: '即时印行',
@@ -48,9 +52,7 @@ export default function DebateView() {
   const { id } = useParams<{ id: string }>()
   const [debate, setDebate] = useState<any>(null)
   const [liveMode, setLiveMode] = useState(false)
-  const [staticStreams, setStaticStreams] = useState<Record<ModelName, ModelStream[]>>({
-    claude: [], chatgpt: [], deepseek: [],
-  })
+  const [staticStreams, setStaticStreams] = useState<Record<ModelName, ModelStream[]>>(emptyStreams())
   const [staticSummary, setStaticSummary] = useState<
     { comparison: string; finalProposal: string; dissent?: string } | null
   >(null)
@@ -67,7 +69,7 @@ export default function DebateView() {
         const isActive = data.debate.status === 'pending' || data.debate.status === 'running'
         setLiveMode(isActive)
 
-        const streams: Record<ModelName, ModelStream[]> = { claude: [], chatgpt: [], deepseek: [] }
+        const streams: Record<ModelName, ModelStream[]> = emptyStreams()
         for (const msg of data.messages) {
           if (!streams[msg.model]) streams[msg.model] = []
           streams[msg.model].push({
@@ -103,6 +105,14 @@ export default function DebateView() {
     : staticStreams
 
   const byPhase = useMemo(() => transposeByPhase(streams), [streams])
+  const participants: ModelName[] = useMemo(() => {
+    try {
+      const parsed = JSON.parse(debate?.participants ?? '[]')
+      if (Array.isArray(parsed) && parsed.length === 3) return parsed as ModelName[]
+    } catch {}
+    const fromMessages = MODELS.filter(m => (streams[m] ?? []).length > 0)
+    return fromMessages.length === 3 ? fromMessages : ['claude', 'chatgpt', 'deepseek']
+  }, [debate?.participants, streams])
 
   // Where the debate ITSELF is at (vs. what the user is viewing).
   const highestStoredPhase = (Object.values(staticStreams).flat()
@@ -321,6 +331,7 @@ export default function DebateView() {
         {viewPhase === 2 && (
           <PhaseTwoView
             panels={byPhase[2]}
+            participants={participants}
             isActivePhase={isViewPhaseActive}
             isAborted={isViewPhaseAborted}
             onRefetch={m => refetch(2, m)}
@@ -329,7 +340,8 @@ export default function DebateView() {
         {viewPhase === 3 && (
           <PhaseThreeView
             panels={byPhase[3]}
-            anonOrder={MODELS}
+            participants={participants}
+            anonOrder={participants}
             isActivePhase={isViewPhaseActive}
             isAborted={isViewPhaseAborted}
           />
@@ -337,6 +349,7 @@ export default function DebateView() {
         {viewPhase === 4 && (
           <PhaseFourView
             panels={byPhase[4]}
+            participants={participants}
             isActivePhase={isViewPhaseActive}
             isAborted={isViewPhaseAborted}
             onRefetch={m => refetch(4, m)}
@@ -354,6 +367,7 @@ export default function DebateView() {
         {viewPhase === 6 && (
           <PhaseSixView
             panels={byPhase[6]}
+            participants={participants}
             synthesizer={synthesizer}
             isActivePhase={isViewPhaseActive}
             isAborted={isViewPhaseAborted}

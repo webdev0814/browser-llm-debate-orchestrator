@@ -30,7 +30,7 @@ async function main() {
 
   if (isFirstRun) {
     console.log('\n[server] First run detected!')
-    console.log('[server] Please log into ChatGPT, Claude, and DeepSeek in the browser window,')
+    console.log('[server] Please log into the supported model sites in the browser window,')
     console.log('[server] then click "已登录" in the web UI to continue.\n')
   }
 

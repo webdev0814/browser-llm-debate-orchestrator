@@ -40,7 +40,7 @@ export function useRefetchMessage(
       const detail = await fetch(`/api/debates/${debateId}`).then(r => r.json()) as {
         messages: StoredMessage[]; summary?: StoredSummary
       }
-      const streams: Record<ModelName, ModelStream[]> = { claude: [], chatgpt: [], deepseek: [] }
+      const streams: Record<ModelName, ModelStream[]> = { claude: [], chatgpt: [], deepseek: [], gemini: [], grok: [] }
       for (const msg of detail.messages) {
         streams[msg.model].push({
           phase: msg.phase as DebatePhase,

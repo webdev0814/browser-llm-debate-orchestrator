@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { ModelName } from '../../lib/models.ts'
 import type { ModelStream } from '../../hooks/useDebateSocket.ts'
-import { MODELS, MODEL_META, MODEL_ABBR } from '../../lib/models.ts'
+import { MODEL_META, MODEL_ABBR } from '../../lib/models.ts'
 import {
   parseCritiquesByTarget,
   aggregateRankings,
@@ -24,24 +24,25 @@ const SECTIONS: { id: CritiqueSection; label: string; tone: string }[] = [
 
 export default function PhaseThreeView(props: {
   panels: Partial<Record<ModelName, ModelStream | null>>
+  participants: ModelName[]
   /** Fixed mapping: Phase 2 order → anon label. anonOrder[i] is the author of 甲/乙/丙. */
   anonOrder: ModelName[]
   isActivePhase: boolean
   isAborted: boolean
 }) {
-  const { panels, anonOrder, isActivePhase, isAborted } = props
+  const { panels, participants, anonOrder, isActivePhase, isAborted } = props
 
   // Re-parse on every render — cheap at this content size, stays live as
   // streaming columns grow.
   const { byTarget, ranks } = useMemo(() => {
-    const phase3 = MODELS
+    const phase3 = participants
       .map(m => ({ reviewer: m, content: panels[m]?.content ?? '' }))
       .filter(p => p.content.length > 0)
     return {
       byTarget: parseCritiquesByTarget(phase3),
       ranks: aggregateRankings(phase3),
     }
-  }, [panels.claude?.content, panels.chatgpt?.content, panels.deepseek?.content])
+  }, [participants, panels])
 
   return (
     <section className="fade-up">

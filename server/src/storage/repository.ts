@@ -15,6 +15,7 @@ export interface DebateRow {
   status: DebateStatus
   created_at: number
   completed_at: number | null
+  participants: string
   deepseek_config: string
   claude_config: string
 }
@@ -26,6 +27,7 @@ export interface DebateListRow {
   status: DebateStatus
   created_at: number
   completed_at: number | null
+  participants: string
 }
 
 export interface MessageRow {
@@ -48,13 +50,14 @@ export const debates = {
     topic: string
     principles: string
     synthesizer: ModelName
+    participantsJson: string
     deepseekConfigJson: string
     claudeConfigJson: string
   }): void {
     db.prepare(
-      'INSERT INTO debates (id, topic, principles, synthesizer, status, created_at, deepseek_config, claude_config) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+      'INSERT INTO debates (id, topic, principles, synthesizer, status, created_at, participants, deepseek_config, claude_config) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
     ).run(args.id, args.topic, args.principles, args.synthesizer, 'pending', Date.now(),
-      args.deepseekConfigJson, args.claudeConfigJson)
+      args.participantsJson, args.deepseekConfigJson, args.claudeConfigJson)
   },
 
   setStatus(id: string, status: DebateStatus): void {
@@ -76,7 +79,7 @@ export const debates = {
 
   list(): DebateListRow[] {
     return db.prepare(
-      'SELECT id, topic, synthesizer, status, created_at, completed_at FROM debates ORDER BY created_at DESC'
+      'SELECT id, topic, synthesizer, status, created_at, completed_at, participants FROM debates ORDER BY created_at DESC'
     ).all() as DebateListRow[]
   },
 

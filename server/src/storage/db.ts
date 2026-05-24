@@ -25,6 +25,9 @@ for (const col of ['deepseek_config', 'claude_config']) {
     _db.exec(`ALTER TABLE debates ADD COLUMN ${col} TEXT NOT NULL DEFAULT '{}'`)
   } catch { /* column already exists */ }
 }
+try {
+  _db.exec(`ALTER TABLE debates ADD COLUMN participants TEXT NOT NULL DEFAULT '["claude","chatgpt","deepseek"]'`)
+} catch { /* column already exists */ }
 // 5-phase iteration: summaries gains a "dissent" (少数派意见) column.
 try {
   _db.exec(`ALTER TABLE summaries ADD COLUMN dissent TEXT NOT NULL DEFAULT ''`)

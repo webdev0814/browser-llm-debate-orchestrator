@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS debates (
   status TEXT NOT NULL DEFAULT 'pending',
   created_at INTEGER NOT NULL,
   completed_at INTEGER,
+  participants TEXT NOT NULL DEFAULT '["claude","chatgpt","deepseek"]',
   deepseek_config TEXT NOT NULL DEFAULT '{"mode":"fast","deepThink":false,"smartSearch":false}',
   claude_config TEXT NOT NULL DEFAULT '{"model":"sonnet-4-6"}'
 );
