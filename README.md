@@ -1,6 +1,12 @@
-# Making Debate
+# Multi-LLM Debate Orchestrator
 
 A structured multi-LLM debate orchestrator that drives consumer web chat apps instead of API endpoints.
+
+## Product Context
+
+This reference project demonstrates a repeatable decision workflow: generate independent proposals, expose assumptions through critique, require revisions, synthesize the strongest elements, and retain an explicit ratification step. It is useful for AI product teams evaluating orchestration patterns, decision quality, provider diversity, and human-governed automation.
+
+Maintained by [Jason Agentic](https://x.com/Jason_Agentic).
 
 This fork keeps the original five-phase debate format and expands the supported provider pool so each debate can use any 3 of these web models:
 
