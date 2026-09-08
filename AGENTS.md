@@ -38,6 +38,9 @@ npm run dev
 
 ## 4. Recent Commit Activity (Where We Left Off)
 The most recent commits show the latest development trajectory:
+- `[821b00b]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
+- `[42eaae4]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
+- `[029bd1e]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
 - `[5dd7d0f]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
 - `[020aa15]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
 - `[257703c]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
@@ -45,9 +48,6 @@ The most recent commits show the latest development trajectory:
 - `[f9f69cd]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
 - `[d1e5ae6]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
 - `[64b7540]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
-- `[48bffef]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
-- `[de4be8b]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
-- `[27477b6]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
 
 ---
 
