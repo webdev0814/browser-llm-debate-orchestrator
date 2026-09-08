@@ -38,6 +38,9 @@ npm run dev
 
 ## 4. Recent Commit Activity (Where We Left Off)
 The most recent commits show the latest development trajectory:
+- `[421d0c7]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
+- `[1ee1f89]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
+- `[27271bd]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
 - `[8d64196]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
 - `[128e281]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
 - `[62c01a6]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
@@ -45,9 +48,6 @@ The most recent commits show the latest development trajectory:
 - `[9961370]` (2026-09-03) Frame orchestrator as an AI product reference
 - `[2bfd20a]` (2026-05-24) Add Gemini and Grok support scaffolding
 - `[ed49fd7]` (2026-05-12) Strip iteration/comparison framing from README
-- `[75bd081]` (2026-05-12) Update README + GitHub description for 5-phase flow
-- `[29101cc]` (2026-05-12) Export: encode filename into URL path so basename fallback works
-- `[340f83c]` (2026-05-12) Export: switch to blob-URL download so .md filename is guaranteed
 
 ---
 
