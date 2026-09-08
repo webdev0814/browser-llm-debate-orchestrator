@@ -4,7 +4,7 @@
 - **Repository**: `webdev0814/browser-llm-debate-orchestrator`
 - **Visibility**: `Public`
 - **Default Branch**: `main`
-- **Last Updated / Pushed**: 2026-09-04
+- **Last Updated / Pushed**: 2026-09-08
 - **Description**: Multi-model debate coordinator with participant selection supporting Gemini, OpenAI, Claude, DeepSeek, and Grok.
 - **Context from README**: A structured multi-LLM debate orchestrator that drives consumer web chat apps instead of API endpoints. This reference project demonstrates a repeatable decision workflow: generate independent proposals, expose assumptions through critique, require revisions, synthesize the strongest elements, and r...
 - **Topics/Tags**: anthropic, gemini-api, llm-debate, openai
@@ -38,6 +38,9 @@ npm run dev
 
 ## 4. Recent Commit Activity (Where We Left Off)
 The most recent commits show the latest development trajectory:
+- `[cecadca]` (2026-09-08) docs: update agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
+- `[d71fdd6]` (2026-09-08) docs: update agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
+- `[122fc1e]` (2026-09-08) docs: update agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
 - `[21b6e52]` (2026-09-08) docs: update agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
 - `[03a7d37]` (2026-09-08) docs: update agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
 - `[068de64]` (2026-09-08) docs: update agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
@@ -45,9 +48,6 @@ The most recent commits show the latest development trajectory:
 - `[1ee1f89]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
 - `[27271bd]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
 - `[8d64196]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
-- `[128e281]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
-- `[62c01a6]` (2026-09-04) docs: add comprehensive agent briefing (AGENTS.md, GEMINI.md, CLAUDE.md)
-- `[c47c992]` (2026-09-03) Add security reporting and repository hygiene policy
 
 ---
 
