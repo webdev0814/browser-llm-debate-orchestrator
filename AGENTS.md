@@ -4,7 +4,7 @@
 - **Repository**: `webdev0814/browser-llm-debate-orchestrator`
 - **Visibility**: `Public`
 - **Default Branch**: `main`
-- **Last Updated / Pushed**: 2026-09-08
+- **Last Updated / Pushed**: 2026-09-09
 - **Description**: Multi-model debate coordinator with participant selection supporting Gemini, OpenAI, Claude, DeepSeek, and Grok.
 - **Context from README**: A structured multi-LLM debate orchestrator that drives consumer web chat apps instead of API endpoints. This reference project demonstrates a repeatable decision workflow: generate independent proposals, expose assumptions through critique, require revisions, synthesize the strongest elements, and r...
 - **Topics/Tags**: anthropic, gemini-api, llm-debate, openai
@@ -38,6 +38,9 @@ npm run dev
 
 ## 4. Recent Commit Activity (Where We Left Off)
 The most recent commits show the latest development trajectory:
+- `[edee0ca]` (2026-09-09) docs: update agent briefing with multi-computer handoff protocol
+- `[c182f29]` (2026-09-09) docs: update agent briefing with multi-computer handoff protocol
+- `[6323da6]` (2026-09-09) docs: update agent briefing with multi-computer handoff protocol
 - `[2b3354d]` (2026-09-09) docs: update agent briefing with multi-computer handoff protocol
 - `[e7c1a6e]` (2026-09-09) docs: update agent briefing with multi-computer handoff protocol
 - `[de4a5e0]` (2026-09-09) docs: update agent briefing with multi-computer handoff protocol
@@ -45,9 +48,6 @@ The most recent commits show the latest development trajectory:
 - `[b75d7b9]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
 - `[403f1d7]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
 - `[821b00b]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
-- `[42eaae4]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
-- `[029bd1e]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
-- `[5dd7d0f]` (2026-09-08) docs: update agent briefing with multi-computer handoff protocol
 
 ---
 
